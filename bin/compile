@@ -9,6 +9,9 @@ set -e
 # debug verbosely.
 #set -x
 
+export METEOR_DEBUG_BUILD=1
+export METEOR_PROFILE=100
+
 get_node_major_version() {
   local node_version=`METEOR node --version`
   # major_string will be ex: "6." "8." "10"
