@@ -125,8 +125,8 @@ cd "$APP_SOURCE_DIR"
 echo "-----> Target Meteor version: `METEOR --version`"
 
 
-echo "-----> Using node: `$(METEOR node --version)`"
-echo "----->    and npm: `$(METEOR npm --version)s`"
+echo "-----> Using node: `$(METEOR) node --version`"
+echo "----->    and npm: `$(METEOR) npm --version`"
 
 # If we use npm on root, run npm install.  Don't use `--production` here, as we
 # may need devDependencies (e.g. webpack) in order to build the meteor app.
