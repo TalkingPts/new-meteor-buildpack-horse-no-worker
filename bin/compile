@@ -264,9 +264,9 @@ if [ -e "$COMPILE_DIR"/app/programs/server/package.json ]; then
 
   # remove unnecessary files
   find . -type f -name 'README.md' -delete
-    && find . -type f -name 'LICENSE' -delete
-    && find . -type f -name '*.d.ts' -delete
-    && rm -r ./npm/node_modules/meteor/babel-compiler/node_modules/typescript
+  find . -type f -name 'LICENSE' -delete
+  find . -type f -name '*.d.ts' -delete
+  rm -r ./npm/node_modules/meteor/babel-compiler/node_modules/typescript
 fi
 
 #
