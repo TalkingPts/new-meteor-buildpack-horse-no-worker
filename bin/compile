@@ -131,7 +131,7 @@ echo "----->    and npm: `METEOR npm --version`"
 # If we use npm on root, run npm install.  Don't use `--production` here, as we
 # may need devDependencies (e.g. webpack) in order to build the meteor app.
 if [ -e "$APP_SOURCE_DIR"/package.json ]; then
-   METEOR npm ci
+   METEOR npm ci --package-lock-only --ignore-scripts --no-audit
 fi
 
 # Now on to bundling. Don't put the bundle in $APP_CHECKOUT_DIR during
