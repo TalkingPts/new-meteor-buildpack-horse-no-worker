@@ -300,3 +300,5 @@ if [ -n "$BUILDPACK_CLEAR_CACHE" ]; then
   echo "-----> Clearing cache dir."
   rm -rf $METEOR_DIR
 fi
+
+PATH=$PATH:$HOME/.meteor
