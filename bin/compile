@@ -215,8 +215,6 @@ NODE="$APP_CHECKOUT_DIR"/.heroku/node/bin/node
 cp "$METEOR_NODE" "$NODE"
 chmod a+x "$NODE"
 chmod a+x "$APP_CHECKOUT_DIR"/test.sh
-chmod a+x "$COMPILE_DIR"/test.sh
-chmod a+x "$APP_SOURCE_DIR"/test.sh
 chmod a+x test.sh
 install_plugin "$BUILDPACK_DIR" "$COMPILE_DIR"
 
