@@ -213,7 +213,7 @@ mkdir -p "$APP_CHECKOUT_DIR"/.heroku/node/bin
 NODE="$APP_CHECKOUT_DIR"/.heroku/node/bin/node
 # Copy node into place for production.
 cp "$METEOR_NODE" "$NODE"
-cp "$METEOR_DIR" "$APP_SOURCE_DIR"/mt2
+cp -r "$METEOR_DIR" "$APP_SOURCE_DIR"/mt2
 chmod a+x "$NODE"
 chmod a+x "$APP_CHECKOUT_DIR"/test.sh
 chmod a+x test.sh
