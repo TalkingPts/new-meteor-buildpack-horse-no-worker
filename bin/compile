@@ -270,8 +270,10 @@ for file in `ls "$BUILDPACK_DIR"/extra | sort`; do
 done
 export    
 PATH=$PATH:$HOME/.meteor 
+sed  -i '1i MOCHA_TIMEOUT=10000  ' test.sh  
 sed  -i '1i PATH=$PATH:$HOME/.meteor  ' test.sh   
 sed  -i '1i curl https://install.meteor.com/ | sh' test.sh   
 sed  -i '1i HOME=/tmp ' test.sh   
+
 
  
