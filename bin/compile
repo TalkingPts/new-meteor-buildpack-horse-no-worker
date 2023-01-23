@@ -293,12 +293,4 @@ for file in `ls "$BUILDPACK_DIR"/extra | sort`; do
   . "$BUILDPACK_DIR"/extra/$file
 done
 
-#
-# Clear cache after build is done
-#
-if [ -n "$BUILDPACK_CLEAR_CACHE" ]; then
-  echo "-----> Clearing cache dir."
-  rm -rf $METEOR_DIR
-fi
-
-PATH=$PATH:$HOME/.meteor
+PATH=$PATH:$METEOR_DIR/.meteor
