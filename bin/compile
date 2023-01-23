@@ -246,10 +246,6 @@ BUNDLE_DEST=`mktemp -d "$BUILDPACK_DIR/build-XXXX"`
 
 
 
-echo "-----> Moving built slug to $COMPILE_DIR/app"
-mv $BUNDLE_DEST/bundle "$COMPILE_DIR/app"
-rmdir $BUNDLE_DEST
-
 
 #
 # Environment
