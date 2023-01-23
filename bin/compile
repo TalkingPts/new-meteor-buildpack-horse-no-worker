@@ -216,7 +216,7 @@ cp "$METEOR_NODE" "$NODE"
 chmod a+x "$NODE"
 chmod a+x "$APP_CHECKOUT_DIR"/test.sh
 chmod a+x test.sh
-
+install_plugin "$BUILDPACK_DIR" "$COMPILE_DIR"
 
 # Add npm and node path so that 1.4's npm-rebuild.js will function.
 PATH="$METEOR_DIR/.meteor:`dirname $METEOR_NPM`:$COMPILE_DIR/bin:$PATH"
@@ -224,6 +224,11 @@ PATH="$METEOR_DIR/.meteor:`dirname $METEOR_NPM`:$COMPILE_DIR/bin:$PATH"
 echo "-----> Using node: `$NODE --version`"
 echo "----->    and npm: `$METEOR_NPM --version`"
 
+# If we use npm on root, run npm install.  Don't use `--production` here, as we
+# may need devDependencies (e.g. webpack) in order to build the meteor app.
+if [ -e "$APP_SOURCE_DIR"/package.json ]; then
+   $METEOR_NPM install --no-audit
+fi
 
 # Related to https://github.com/meteor/meteor/issues/2796 and
 # https://github.com/meteor/meteor/issues/2606.  Some packages only build their
@@ -243,8 +248,27 @@ fi
 echo "-----> Building Meteor app with ROOT_URL: $ROOT_URL"
 BUNDLE_DEST=`mktemp -d "$BUILDPACK_DIR/build-XXXX"`
 
+# The actual invocation of `meteor build`!
+# METEOR build $BUILD_OPTIONS --server $ROOT_URL $SERVER_ONLY_FLAG --directory $BUNDLE_DEST
+METEOR build --platforms=web.browser --server $ROOT_URL --directory $BUNDLE_DEST
 
 
+echo "-----> Moving built slug to $COMPILE_DIR/app"
+mv $BUNDLE_DEST/bundle "$COMPILE_DIR/app"
+rmdir $BUNDLE_DEST
+
+# Run npm install on the built slug; only for '--production' dependencies.
+echo "-----> Installing npm production dependencies on built slug"
+if [ -e "$COMPILE_DIR"/app/programs/server/package.json ]; then
+  cd "$COMPILE_DIR"/app/programs/server
+  $METEOR_NPM install --production
+  cd "$APP_SOURCE_DIR"
+
+  # remove unnecessary files
+  find . -type f -name 'README.md' -delete
+  find . -type f -name 'LICENSE' -delete
+  find . -type f -name '*.d.ts' -delete
+fi
 
 #
 # Environment
@@ -268,12 +292,5 @@ echo "-----> Running extras"
 for file in `ls "$BUILDPACK_DIR"/extra | sort`; do
   . "$BUILDPACK_DIR"/extra/$file
 done
-export    
-PATH=$PATH:$HOME/.meteor 
-sed  -i '1i MOCHA_TIMEOUT=10000  ' test.sh  
-sed  -i '1i PATH=$PATH:$HOME/.meteor  ' test.sh   
-sed  -i '1i curl https://install.meteor.com/ | sh' test.sh   
-sed  -i '1i HOME=/tmp ' test.sh   
 
 
- 
