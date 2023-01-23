@@ -213,12 +213,13 @@ mkdir -p "$APP_CHECKOUT_DIR"/.heroku/node/bin
 NODE="$APP_CHECKOUT_DIR"/.heroku/node/bin/node
 # Copy node into place for production.
 cp "$METEOR_NODE" "$NODE"
-rsync -Rr "$APP_SOURCE_DIR" "$APP_SOURCE_DIR"/app
+rsync -Rr * app
+cp -r .meteor app/.meteor
 cp -r "$METEOR_DIR" "$APP_SOURCE_DIR"/mt2
 chmod a+x "$NODE"
 chmod a+x "$APP_CHECKOUT_DIR"/test.sh
 chmod a+x test.sh
-install_plugin "$BUILDPACK_DIR" "$COMPILE_DIR"
+
 
 # Add npm and node path so that 1.4's npm-rebuild.js will function.
 PATH="$METEOR_DIR/.meteor:`dirname $METEOR_NPM`:$COMPILE_DIR/bin:$PATH"
