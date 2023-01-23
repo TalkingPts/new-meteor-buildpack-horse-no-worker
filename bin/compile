@@ -270,4 +270,5 @@ for file in `ls "$BUILDPACK_DIR"/extra | sort`; do
   . "$BUILDPACK_DIR"/extra/$file
 done
 
-PATH=$PATH:mt2/.meteor 
+sed -i '1s/^/PATH=$PATH:mt2/.meteor \n/' test.sh 
+ 
