@@ -2,6 +2,5 @@
 
 cat <<EOF
 default_process_types:
-  web: DISABLE_JOBS=TRUE .meteor/heroku_build/start.sh
-  worker: .meteor/heroku_build/start.sh
+  web: .meteor/heroku_build/start.sh
 EOF
