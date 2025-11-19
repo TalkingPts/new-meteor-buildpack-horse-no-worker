@@ -230,6 +230,35 @@ PATH="$METEOR_DIR/.meteor:`dirname $METEOR_NPM`:$COMPILE_DIR/bin:$PATH"
 echo "-----> Using node: `$NODE --version`"
 echo "----->    and npm: `$METEOR_NPM --version`"
 
+# Set up SSH for git+ssh dependencies if GIT_SSH_KEY is defined
+if [ -n "$GIT_SSH_KEY" ]; then
+  echo "-----> Setting up SSH for git+ssh dependencies"
+
+  # Create .ssh directory
+  mkdir -p ~/.ssh
+  chmod 700 ~/.ssh
+
+  # Write the SSH key (handle both base64 encoded and plain text)
+  if echo "$GIT_SSH_KEY" | base64 -d > /dev/null 2>&1; then
+    # Key is base64 encoded
+    echo "$GIT_SSH_KEY" | base64 -d > ~/.ssh/id_rsa
+  else
+    # Key is plain text
+    echo "$GIT_SSH_KEY" > ~/.ssh/id_rsa
+  fi
+
+  chmod 600 ~/.ssh/id_rsa
+
+  # Add GitHub to known_hosts to avoid host verification prompt
+  ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts 2>/dev/null
+
+  # Configure git to use SSH instead of HTTPS for known hosts (optional)
+  # Uncomment if you want automatic rewriting
+  # git config --global url."git@github.com:".insteadOf "https://github.com/"
+
+  echo "-----> SSH key configured (will be cleaned up after build)"
+fi
+
 # If we use npm on root, run npm install.  Don't use `--production` here, as we
 # may need devDependencies (e.g. webpack) in order to build the meteor app.
 if [ -e "$APP_SOURCE_DIR"/package.json ]; then
